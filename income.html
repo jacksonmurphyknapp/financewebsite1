@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BudgetSafe - Income & Expense</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .form-box {
+      padding: 15px;
+      background-color: #f9f9f9;
+      border: 1px solid #aaa;
+      margin: 20px;
+      border-radius: 8px;
+      max-width: 400px;
+    }
+    .form-box input {
+      margin-bottom: 10px;
+      width: 95%;
+      padding: 5px;
+    }
+    canvas {
+      margin-top: 20px;
+    }
+    .btn-danger {
+      background-color: #ff4d4d;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn-danger:hover { background-color: #cc0000; }
+    .btn-secondary {
+      background-color: #4682b4;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+      margin-left: 10px;
+    }
+    .btn-secondary:hover { background-color: #315f7a; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 style="color:darkblue;">Income & Expense Tracking</h1>
+    <nav>
+      <a href="index.html">Home</a> | 
+      <a href="income.html">Income & Expense</a> | 
+      <a href="overview.html">Budget Overview</a> | 
+      <a href="feedback.html">Feedback</a>
+    </nav>
+    <button onclick="logoutUser()" style="float:right; margin:10px; background-color:#ff4d4d; color:white; border:none; padding:8px 12px; border-radius:5px; cursor:pointer;">
+      Log Out
+    </button>
+  </header>
+
+  <section class="form-box">
+    <h2>Enter Your Info</h2>
+    <form id="dataForm">
+      <label>Username (auto-filled):</label><br>
+      <input type="text" id="username" required readonly><br>
+
+      <label>Enter Budget Category:</label><br>
+      <input type="text" id="budgetCategory" placeholder="e.g. Rent, Food, Utilities"><br>
+
+      <label>Enter Budget Amount:</label><br>
+      <input type="number" id="budgetAmount" placeholder="e.g. 1200"><br>
+
+      <label>Enter Expense Category:</label><br>
+      <input type="text" id="expenseCategory" placeholder="e.g. Rent, Food, Utilities"><br>
+
+      <label>Enter Expense Amount:</label><br>
+      <input type="number" id="expenseAmount" placeholder="e.g. 200"><br>
+
+      <button type="submit">Save & Update Graph</button>
+    </form>
+
+    <!-- Reset Data Button -->
+    <button class="btn-danger" onclick="resetUserData()">Reset My Data</button>
+
+    <!-- Go to Overview Button -->
+    <button class="btn-secondary" onclick="goToOverview()">Go to Overview</button>
+  </section>
+
+  <section>
+    <h2>Budget vs Expenses</h2>
+    <canvas id="budgetChart" width="400" height="200"></canvas>
+  </section>
+
+  <script>
+    function logoutUser() {
+      localStorage.removeItem("currentUser");
+      window.location.href = "index.html";
+    }
+
+    function loadUserData(username) {
+      return JSON.parse(localStorage.getItem(username)) || { budgets: {}, expenses: {} };
+    }
+
+    function saveUserData(username, data) {
+      localStorage.setItem(username, JSON.stringify(data));
+    }
+
+    function resetUserData() {
+      const username = document.getElementById("username").value;
+      if (confirm("Are you sure you want to clear all your budget and expense data?")) {
+        localStorage.setItem(username, JSON.stringify({ budgets: {}, expenses: {} }));
+        updateChart({ budgets: {}, expenses: {} });
+        alert("Your data has been reset.");
+      }
+    }
+
+    function goToOverview() {
+      window.location.href = "overview.html";
+    }
+
+    const ctx = document.getElementById("budgetChart").getContext("2d");
+    let budgetChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: [],
+        datasets: [
+          { label: "Budget", data: [], backgroundColor: "rgba(75, 192, 192, 0.6)" },
+          { label: "Expenses", data: [], backgroundColor: "rgba(255, 99, 132, 0.6)" }
+        ]
+      },
+      options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+
+    document.getElementById("dataForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value;
+      const budgetCategory = document.getElementById("budgetCategory").value;
+      const budgetAmount = parseFloat(document.getElementById("budgetAmount").value);
+      const expenseCategory = document.getElementById("expenseCategory").value;
+      const expenseAmount = parseFloat(document.getElementById("expenseAmount").value);
+
+      let userData = loadUserData(username);
+
+      if (budgetCategory && budgetAmount) {
+        userData.budgets[budgetCategory] = (userData.budgets[budgetCategory] || 0) + budgetAmount;
+      }
+
+      if (expenseCategory && expenseAmount) {
+        userData.expenses[expenseCategory] = (userData.expenses[expenseCategory] || 0) + expenseAmount;
+      }
+
+      saveUserData(username, userData);
+      updateChart(userData);
+    });
+
+    function updateChart(userData) {
+      const categories = Array.from(new Set([...Object.keys(userData.budgets), ...Object.keys(userData.expenses)]));
+      const budgetData = categories.map(cat => userData.budgets[cat] || 0);
+      const expenseData = categories.map(cat => userData.expenses[cat] || 0);
+
+      budgetChart.data.labels = categories;
+      budgetChart.data.datasets[0].data = budgetData;
+      budgetChart.data.datasets[1].data = expenseData;
+      budgetChart.update();
+    }
+
+    window.onload = function() {
+      const savedUser = localStorage.getItem("currentUser");
+      if (savedUser) {
+        document.getElementById("username").value = savedUser;
+        updateChart(loadUserData(savedUser));
+      }
+    };
+  </script>
+</body>
+</html>
+
+

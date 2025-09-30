@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BudgetSafe - Feedback</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .feedback-box {
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #fafafa;
+    }
+    .feedback-box input, .feedback-box textarea {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+    }
+    .feedback-box button {
+      background-color: #4682b4;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .feedback-box button:hover { background-color: #315f7a; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 style="color:purple;">We’d Love Your Feedback</h1>
+    <nav>
+      <a href="index.html">Home</a> | 
+      <a href="income.html">Income & Expense</a> | 
+      <a href="overview.html">Budget Overview</a> | 
+      <a href="feedback.html">Feedback</a>
+    </nav>
+    <button onclick="logoutUser()" style="float:right; margin:10px; background-color:#ff4d4d; color:white; border:none; padding:8px 12px; border-radius:5px; cursor:pointer;">
+      Log Out
+    </button>
+  </header>
+
+  <section class="feedback-box">
+    <h2>Share Your Thoughts</h2>
+    <form id="feedbackForm">
+      <label for="name">Name:</label><br>
+      <input type="text" id="name" name="name" placeholder="e.g. Jackson Knapp"><br>
+
+      <label for="email">Email:</label><br>
+      <input type="email" id="email" name="email" placeholder="e.g. jackson@example.com"><br>
+
+      <label for="comments">Feedback / Comments:</label><br>
+      <textarea id="comments" name="comments" rows="5" placeholder="Write your message here..."></textarea><br>
+
+      <button type="submit">Submit Feedback</button>
+    </form>
+  </section>
+
+  <script>
+    function logoutUser() {
+      localStorage.removeItem("currentUser");
+      window.location.href = "index.html";
+    }
+
+    // Handle feedback submission
+    document.getElementById("feedbackForm").addEventListener("submit", function(e) {
+      e.preventDefault(); // stop page reload
+      alert("✅ Thank you for your feedback!");
+      this.reset(); // clear the form
+    });
+  </script>
+</body>
+</html>

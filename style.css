@@ -1,0 +1,87 @@
+/* External CSS file shared across all pages */
+
+/* -------- Base page styling -------- */
+body {
+  font-family: Arial, sans-serif; /* Sets clean, readable font */
+  background-color: #ccffcc;      /* Light green background for theme */
+  margin: 20px;                   /* Adds space around entire page */
+  color: #222;                    /* Default text color */
+  line-height: 1.6;               /* Increases text readability */
+}
+
+/* -------- Header & Navigation -------- */
+header {
+  background-color: #eeeeee;  /* Neutral header background */
+  padding: 15px;              /* Space inside header (box model padding) */
+  text-align: center;         /* Centers header content */
+  border: 2px solid #ccc;     /* Border around header (box model border) */
+  border-radius: 8px;         /* Slightly rounded header corners */
+}
+
+/* Navigation links inside header */
+header nav a {
+  margin: 0 10px;            /* Space between nav links (box model margin) */
+  text-decoration: none;     /* Removes underline */
+  color: #333;               /* Dark gray default link color */
+  font-weight: bold;         /* Makes links stand out */
+}
+
+/* Hover effect for nav links */
+header nav a:hover {
+  color: #4682b4;            /* Changes link color on hover */
+  text-decoration: underline;/* Adds underline to indicate interactivity */
+}
+
+/* -------- Sections -------- */
+section {
+  margin: 20px 0;            /* Space between page sections */
+  padding: 15px;             /* Space inside section content */
+  background-color: #f9f9f9; /* Light background to distinguish content */
+  border: 1px solid #ddd;    /* Subtle border */
+  border-radius: 5px;        /* Rounded edges for style */
+}
+
+/* -------- Images -------- */
+img {
+  border-radius: 10px;       /* Smooth rounded corners */
+  max-width: 100%;           /* Makes images responsive */
+  height: auto;              /* Keeps image proportions */
+  border: 3px solid #ccc;    /* Adds border around images */
+  padding: 5px;              /* Space inside border (box model padding) */
+}
+
+/* -------- IDs (unique elements) -------- */
+#main-title {
+  font-size: 2em;            /* Large title text */
+  color: #2e8b57;            /* Dark green to match color scheme */
+  text-align: center;        /* Centers main title */
+}
+
+#footer {
+  text-align: center;        /* Centers footer text */
+  padding: 10px;             /* Space inside footer */
+  font-size: 0.9em;          /* Slightly smaller text */
+  color: #666;               /* Gray footer text */
+}
+
+/* -------- Classes (reusable styles) -------- */
+.highlight {
+  background-color: #ffff99; /* Yellow highlight background */
+  padding: 3px;              /* Small padding to separate from text */
+  border-radius: 3px;        /* Slight curve around highlight */
+}
+
+.button {
+  background-color: #4682b4; /* Steel blue button background */
+  color: white;              /* White button text */
+  padding: 10px 20px;        /* Box model padding inside button */
+  border: none;              /* Removes default border */
+  border-radius: 5px;        /* Rounded corners */
+  cursor: pointer;           /* Cursor changes to pointer on hover */
+  font-size: 1em;            /* Normal text size */
+}
+
+.button:hover {
+  background-color: #2e8b57; /* Dark green hover effect */
+}
+  

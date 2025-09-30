@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BudgetSafe - Home</title>
+  <link rel="stylesheet" href="style.css"> <!-- External CSS -->
+  <style>
+    .features {
+      margin-top: 20px;
+      padding: 10px;
+      border: 2px solid #333;
+      background-color: #f0fff0;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 15px;
+      background-color: #4682b4;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background-color: #315f7a;
+    }
+    #usernameBox {
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 style="color:darkgreen;">Welcome to BudgetSafe!</h1>
+    <nav>
+      <a href="index.html">Home</a> | 
+      <a href="income.html">Income & Expense</a> | 
+      <a href="overview.html">Budget Overview</a> | 
+      <a href="feedback.html">Feedback</a>
+    </nav>
+  </header>
+
+  <section>
+    <h2>About BudgetSafe</h2>
+    <img src="logo.png" alt="Jar of coins" width="400">
+    <p>
+      A simple tool designed to help you take control of your personal finances.
+      Track your income, log expenses, and review your financial goals with easy charts.
+    </p>
+
+    <!-- Username entry -->
+    <div id="usernameBox">
+      <label for="username">Enter your username to begin:</label><br>
+      <input type="text" id="username" placeholder="e.g. jackson123">
+    </div>
+
+    <!-- Button will redirect to income page -->
+    <button class="btn" onclick="startApp()">Get Started</button>
+  </section>
+
+  <section class="features">
+    <h2>Features</h2>
+    <ul>
+      <li>Income & Expense Tracking</li>
+      <li>Budget Overview</li>
+      <li>Feedback / Contact Form</li>
+    </ul>
+  </section>
+
+  <script>
+    function startApp() {
+      const username = document.getElementById("username").value.trim();
+      if (!username) {
+        alert("Please enter a username to continue.");
+        return;
+      }
+      localStorage.setItem("currentUser", username);
+      window.location.href = "income.html";
+    }
+  </script>
+</body>
+</html>

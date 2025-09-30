@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BudgetSafe - Budget Overview</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .chart-box {
+      margin: 20px;
+      padding: 15px;
+      border: 1px solid #bbb;
+      background-color: #fdfdfd;
+      border-radius: 10px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    button {
+      padding: 8px 12px;
+      margin-top: 5px;
+      background-color: #4682b4;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover { background-color: #315f7a; }
+    canvas { margin-top: 20px; }
+    .btn-danger {
+      background-color: #ff4d4d;
+      margin-left: 10px;
+    }
+    .btn-danger:hover { background-color: #cc0000; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 style="color:maroon;">Budget Overview</h1>
+    <nav>
+      <a href="index.html">Home</a> | 
+      <a href="income.html">Income & Expense</a> | 
+      <a href="overview.html">Budget Overview</a> | 
+      <a href="feedback.html">Feedback</a>
+    </nav>
+    <button onclick="logoutUser()" class="btn-danger" style="float:right; margin:10px;">
+      Log Out
+    </button>
+  </header>
+
+  <section class="chart-box">
+    <h2>Spending vs. Budget</h2>
+    <canvas id="overviewChart" width="600" height="300"></canvas>
+  </section>
+
+  <section class="chart-box">
+    <h2>Expense Breakdown</h2>
+    <canvas id="pieChart" width="400" height="300"></canvas>
+  </section>
+
+  <!-- Back Button -->
+  <section style="text-align:center; margin-top:20px;">
+    <button onclick="goBack()">⬅ Back to Income Page</button>
+  </section>
+
+  <section>
+    <h2>Tips & Suggestions</h2>
+    <ul>
+      <li>Plan meals ahead to save on food costs.</li>
+      <li>Cut back on impulse spending.</li>
+      <li>Save a small amount regularly for long-term goals.</li>
+    </ul>
+  </section>
+
+  <script>
+    function logoutUser() {
+      localStorage.removeItem("currentUser");
+      window.location.href = "index.html";
+    }
+
+    function goBack() {
+      window.location.href = "income.html";
+    }
+
+    function loadUserData(username) {
+      return JSON.parse(localStorage.getItem(username)) || { budgets: {}, expenses: {} };
+    }
+
+    const ctx1 = document.getElementById("overviewChart").getContext("2d");
+    let overviewChart = new Chart(ctx1, {
+      type: "bar",
+      data: { labels: [], datasets: [
+        { label: "Budget", data: [], backgroundColor: "rgba(75, 192, 192, 0.6)" },
+        { label: "Expenses", data: [], backgroundColor: "rgba(255, 99, 132, 0.6)" }
+      ]},
+      options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+
+    const ctx2 = document.getElementById("pieChart").getContext("2d");
+    let pieChart = new Chart(ctx2, {
+      type: "pie",
+      data: { labels: [], datasets: [
+        { label: "Expenses", data: [], backgroundColor: [
+            "rgba(255, 99, 132, 0.6)",
+            "rgba(54, 162, 235, 0.6)",
+            "rgba(255, 206, 86, 0.6)",
+            "rgba(75, 192, 192, 0.6)",
+            "rgba(153, 102, 255, 0.6)",
+            "rgba(255, 159, 64, 0.6)"
+        ]}
+      ]},
+      options: { responsive: true }
+    });
+
+    function updateCharts(userData) {
+      const categories = Array.from(new Set([...Object.keys(userData.budgets), ...Object.keys(userData.expenses)]));
+      const budgetData = categories.map(cat => userData.budgets[cat] || 0);
+      const expenseData = categories.map(cat => userData.expenses[cat] || 0);
+
+      overviewChart.data.labels = categories;
+      overviewChart.data.datasets[0].data = budgetData;
+      overviewChart.data.datasets[1].data = expenseData;
+      overviewChart.update();
+
+      pieChart.data.labels = Object.keys(userData.expenses);
+      pieChart.data.datasets[0].data = Object.values(userData.expenses);
+      pieChart.update();
+    }
+
+    window.onload = function() {
+      const savedUser = localStorage.getItem("currentUser");
+      if (savedUser) {
+        updateCharts(loadUserData(savedUser));
+      } else {
+        alert("Please log in from the homepage first.");
+        window.location.href = "index.html";
+      }
+    };
+  </script>
+</body>
+</html>
+
